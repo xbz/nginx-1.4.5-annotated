@@ -22,8 +22,16 @@
 
 #define NGX_PROCESS_SINGLE     0
 #define NGX_PROCESS_MASTER     1
+/*
+ * ngx_annotated 2
+ * singal process(stop,quit,reopen,reload)
+ */
 #define NGX_PROCESS_SIGNALLER  2
 #define NGX_PROCESS_WORKER     3
+/*
+ * ngx_annotated 3
+ * cache manager process
+ */
 #define NGX_PROCESS_HELPER     4
 
 

@@ -357,8 +357,21 @@ ngx_start_worker_processes(ngx_cycle_t *cycle, ngx_int_t n, ngx_int_t type)
 
     ch.command = NGX_CMD_OPEN_CHANNEL;
 
+/*
+ * ngx_annotated 4
+ * start n worker process
+ * n is worker_process variable, it can be 0
+ */
     for (i = 0; i < n; i++) {
 
+/*
+ * ngx_annotated 5
+ * start worker process:
+ * 1. fork a child process
+ * 2. child process call ngx_worker_process_cycle,
+ * function ngx_worker_process_cycle:
+ * call ngx_process_events_and_timers indefinitely
+ */
         ngx_spawn_process(cycle, ngx_worker_process_cycle,
                           (void *) (intptr_t) i, "worker process", type);
 

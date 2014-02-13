@@ -405,6 +405,10 @@ main(int argc, char *const *argv)
 
     ngx_use_stderr = 0;
 
+/*
+ * ngx_annotated 1
+ * #define NGX_PROCESS_SINGLE     0
+ */
     if (ngx_process == NGX_PROCESS_SINGLE) {
         ngx_single_process_cycle(cycle);
 
