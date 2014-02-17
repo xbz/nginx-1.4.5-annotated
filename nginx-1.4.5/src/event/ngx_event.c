@@ -246,6 +246,22 @@ ngx_process_events_and_timers(ngx_cycle_t *cycle)
 
     delta = ngx_current_msec;
 
+/*
+ * ngx_annotated 3
+ * #define ngx_process_events   ngx_event_actions.process_events
+ * src/event/modules/ngx_epoll_module.c:
+ *   ngx_event_actions = ngx_epoll_module_ctx.actions;
+ * src/event/modules/ngx_poll_module.c:
+ *   ngx_event_actions = ngx_poll_module_ctx.actions;
+ * src/event/modules/ngx_select_module.c:
+ *   ngx_event_actions = ngx_select_module_ctx.actions;
+ * ngx_kqueue_module, ngx_rtsig_module, ngx_eventport_module
+ * ngx_win32_select_module, ngx_devpoll_module, ngx_aio_module
+ *
+ * if using epoll
+ * #define ngx_process_events   ngx_event_actions.process_events
+ * ngx_event_actions = ngx_epoll_module_ctx.actions;
+ */
     (void) ngx_process_events(cycle, timer, flags);
 
     delta = ngx_current_msec - delta;
