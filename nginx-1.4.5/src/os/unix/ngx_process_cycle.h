@@ -20,18 +20,21 @@
 #define NGX_CMD_REOPEN         5
 
 
-#define NGX_PROCESS_SINGLE     0
-#define NGX_PROCESS_MASTER     1
 /*
  * ngx_annotated 2
- * singal process(stop,quit,reopen,reload)
+ * process in nginx
+ * ngx_process's value
+ * NGX_PROCESS_MASTER:    master process
+ * NGX_PROCESS_WORKER:    worker process
+ * NGX_PROCESS_HELPER:    cache manager process
+ * NGX_PROCESS_SIGNALLER: singal process(stop,quit,reopen,reload)
+ * NGX_PROCESS_SINGLE:    no worker process started, only for nginx developers
+ *                        master_process off;
  */
+#define NGX_PROCESS_SINGLE     0
+#define NGX_PROCESS_MASTER     1
 #define NGX_PROCESS_SIGNALLER  2
 #define NGX_PROCESS_WORKER     3
-/*
- * ngx_annotated 3
- * cache manager process
- */
 #define NGX_PROCESS_HELPER     4
 
 
