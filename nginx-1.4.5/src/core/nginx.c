@@ -409,7 +409,39 @@ main(int argc, char *const *argv)
  * ngx_annotated 1
  * #define NGX_PROCESS_SINGLE     0
  */
+
+/*
+ * ngx_annotated 6
+ * 1. master_process off; worker_processes  1;
+ * call ngx_single_process_cycle
+ * [log]ngx_process: 0, ccf->master:0
+ * [log]worker cycle
+ * one process running(not master, no master)
+ *
+ * 2. master_process on;  worker_processes  0;
+ * call ngx_master_process_cycle
+ * [log]ngx_process: 1, ccf->master:1
+ * [log]start worker processes
+ * one process runnuing(master)
+ *
+ * 3. master_process on;  worker_processes  1;
+ * call ngx_master_process_cycle
+ * [log]ngx_process: 1, ccf->master:1
+ * [log]start worker processes
+ * [log]start worker process 24525
+ * [log]worker cycle
+ * two process running(one master and one worker)
+ */
     if (ngx_process == NGX_PROCESS_SINGLE) {
+/*
+ * ngx_annotated 7
+ * master_process: Determines whether worker processes are started.
+ *                 This directive is intended for nginx developers.
+ *
+ * "master_process off;" only this case can enter here(case 1 of anntated 6)
+ * althrough case 2 of annotated 6(master_process on; worker_processes 0;)
+ * has no worker, case 2 enters ngx_master_process_cycle, not here
+ */
         ngx_single_process_cycle(cycle);
 
     } else {
