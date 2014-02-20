@@ -1,0 +1,24 @@
+#define NGX_CORE_MODULE      0x45524F43   /* "CORE" */ /* src/core/ngx_conf_file.h   */
+#define NGX_EVENT_MODULE     0x544E5645   /* "EVNT" */ /* src/event/ngx_event.h      */
+#define NGX_CONF_MODULE      0x464E4F43   /* "CONF" */ /* src/core/ngx_conf_file.h   */
+#define NGX_HTTP_MODULE      0x50545448   /* "HTTP" */ /* src/http/ngx_http_config.h */
+#define NGX_MAIL_MODULE      0x4C49414D   /* "MAIL" */ /* src/mail/ngx_mail.h        */
+
+NGX_CORE_MODULE  8
+  ngx_core_module
+  ngx_events_module
+  ngx_http_module
+  ngx_errlog_module
+  ngx_regex_module
+  ngx_mail_module
+  ngx_openssl_module
+  ngx_google_perftools_module
+NGX_EVENT_MODULE 10
+  ngx_event_core_module
+  ngx_epoll_module
+  ngx_select_module
+  ngx_poll_module
+  ...
+NGX_CONF_MODULE  1
+NGX_HTTP_MODULE  57
+NGX_MAIL_MODULE  7

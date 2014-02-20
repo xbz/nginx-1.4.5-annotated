@@ -368,7 +368,7 @@ ngx_start_worker_processes(ngx_cycle_t *cycle, ngx_int_t n, ngx_int_t type)
  * ngx_annotated 5
  * start worker process:
  * 1. fork a child process
- * 2. child process call ngx_worker_process_cycle,
+ * 2. child process call ngx_worker_process_cycle
  * function ngx_worker_process_cycle:
  * call ngx_process_events_and_timers infinitely
  */

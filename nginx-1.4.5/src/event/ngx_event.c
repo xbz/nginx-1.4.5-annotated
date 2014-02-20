@@ -248,6 +248,7 @@ ngx_process_events_and_timers(ngx_cycle_t *cycle)
 
 /*
  * ngx_annotated 3
+ * NOT DONE!!!
  * #define ngx_process_events   ngx_event_actions.process_events
  * src/event/modules/ngx_epoll_module.c:
  *   ngx_event_actions = ngx_epoll_module_ctx.actions;
@@ -977,6 +978,14 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     if (rv != NGX_CONF_OK)
         return rv;
 
+/*
+ * ngx_annotated 8
+ * call module's init_conf(module->ctx->init_conf), only for NGX_EVENT_MODULE
+ * in an Ubuntu server(having epoll)
+ * NGX_EVENT_MODULE means 2 modules:
+ *   ngx_event_core_module
+ *   ngx_epoll_module
+ */
     for (i = 0; ngx_modules[i]; i++) {
         if (ngx_modules[i]->type != NGX_EVENT_MODULE) {
             continue;
