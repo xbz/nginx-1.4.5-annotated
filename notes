@@ -1,3 +1,15 @@
+configure
+To enable a debugging log, nginx needs to be configured during the build:
+./configure --with-debug
+
+enable debug code inside conditional directive of C preprocessor,
+in objs/Makefile:
+CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g
+remove -O flag of CFLAGS variable
+#if (NGX_HAVE_EPOLL) && !(NGX_TEST_BUILD_EPOLL)
+    int                  fd;
+#endif
+
 #define NGX_CORE_MODULE      0x45524F43   /* "CORE" */ /* src/core/ngx_conf_file.h   */
 #define NGX_EVENT_MODULE     0x544E5645   /* "EVNT" */ /* src/event/ngx_event.h      */
 #define NGX_CONF_MODULE      0x464E4F43   /* "CONF" */ /* src/core/ngx_conf_file.h   */
@@ -22,3 +34,16 @@ NGX_EVENT_MODULE 10
 NGX_CONF_MODULE  1
 NGX_HTTP_MODULE  57
 NGX_MAIL_MODULE  7
+
+core module uses index, others(http,event,mail) use ctx_index?
+module.index:
+  all modules, 0,1,2,3,...
+module.ctx_index: divide into 3 groups
+  event_module, 0,1,2,3,...
+  http_module,  0,1,2,3,...
+  mail_module,  0,1,2,3,...
+$ find -name "*.[hc]" | xargs fgrep --color 'max_module++'
+src/core/nginx.c:      ngx_modules[i]->index     = ngx_max_module++;
+src/event/ngx_event.c: ngx_modules[i]->ctx_index = ngx_event_max_module++;
+src/http/ngx_http.c:   ngx_modules[m]->ctx_index = ngx_http_max_module++;
+src/mail/ngx_mail.c:   ngx_modules[m]->ctx_index = ngx_mail_max_module++;

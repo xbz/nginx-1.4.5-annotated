@@ -276,6 +276,15 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
                        cycle->conf_file.data);
     }
 
+/*
+ * ngx_annotated 9
+ * call module's init_conf(module->ctx->init_conf), only for NGX_CORE_MODULE
+ * in an Ubuntu server(having epoll)
+ * NGX_CORE_MODULE has 3 modules:
+ *   ngx_core_module
+ *   ngx_events_module
+ *   ngx_regex_module
+ */
     for (i = 0; ngx_modules[i]; i++) {
         if (ngx_modules[i]->type != NGX_CORE_MODULE) {
             continue;

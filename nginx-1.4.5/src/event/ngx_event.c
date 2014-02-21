@@ -930,6 +930,14 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     /* count the number of the event modules and set up their indices */
 
+/*
+ * ngx_annotated 10
+ * set NGX_EVENT_MODULE's ctx_index, set to 0,1,2,3,4,...
+ * in an Ubuntu server(having epoll)
+ * NGX_EVENT_MODULE has 2 modules:
+ *   ngx_event_core_module ctx_index=0
+ *   ngx_epoll_module      ctx_index=1
+ */
     ngx_event_max_module = 0;
     for (i = 0; ngx_modules[i]; i++) {
         if (ngx_modules[i]->type != NGX_EVENT_MODULE) {
@@ -951,6 +959,30 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     *(void **) conf = ctx;
 
+/*
+ * ngx_annotated 11
+ * call NGX_EVENT_MODULE's create_conf(module->ctx->create_conf)
+ * in an Ubuntu server(having epoll)
+ * NGX_EVENT_MODULE has 2 modules:
+ *   ngx_event_core_module:
+ *     call ngx_event_core_create_conf
+ *     return ngx_event_conf_t*
+ *     ctx_index=0
+ *     (*ctx)[0] is ngx_event_conf_t*
+ *   ngx_epoll_module:
+ *     call ngx_epoll_create_conf
+ *     return ngx_epoll_conf_t*
+ *     ctx_index=1
+ *     (*ctx)[1] is ngx_epoll_conf_t*
+ *
+ *         ------     ------
+ * ctx ->  |    | ->  |    | -> struct ngx_event_conf_t
+ *         ------     ------
+ *                    |    | -> struct ngx_epoll_conf_t
+ *                    ------
+ *                    |    |
+ *                    ------
+ */
     for (i = 0; ngx_modules[i]; i++) {
         if (ngx_modules[i]->type != NGX_EVENT_MODULE) {
             continue;
@@ -980,9 +1012,9 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 /*
  * ngx_annotated 8
- * call module's init_conf(module->ctx->init_conf), only for NGX_EVENT_MODULE
+ * call NGX_EVENT_MODULE's init_conf(module->ctx->init_conf)
  * in an Ubuntu server(having epoll)
- * NGX_EVENT_MODULE means 2 modules:
+ * NGX_EVENT_MODULE has 2 modules:
  *   ngx_event_core_module
  *   ngx_epoll_module
  */
