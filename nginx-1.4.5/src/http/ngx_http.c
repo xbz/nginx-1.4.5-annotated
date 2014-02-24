@@ -139,6 +139,16 @@ ngx_http_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     /* count the number of the http modules and set up their indices */
 
+/*
+ * ngx_annotated 13
+ * set NGX_HTTP_MODULE's ctx_index, set to 0,1,2,...
+ * in an Ubuntu server(having epoll)
+ * NGX_HTTP_MODULE has 57 modules:
+ *   ngx_http_core_module     index=8  ctx_index=0
+ *   ngx_http_log_module      index=9  ctx_index=1
+ *   ngx_http_upstream_module index=10 ctx_index=2
+ *   ...
+ */
     ngx_http_max_module = 0;
     for (m = 0; ngx_modules[m]; m++) {
         if (ngx_modules[m]->type != NGX_HTTP_MODULE) {

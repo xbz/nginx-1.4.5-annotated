@@ -932,11 +932,11 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 /*
  * ngx_annotated 10
- * set NGX_EVENT_MODULE's ctx_index, set to 0,1,2,3,4,...
+ * set NGX_EVENT_MODULE's ctx_index, set to 0,1,2,...
  * in an Ubuntu server(having epoll)
  * NGX_EVENT_MODULE has 2 modules:
- *   ngx_event_core_module ctx_index=0
- *   ngx_epoll_module      ctx_index=1
+ *   ngx_event_core_module index=4 ctx_index=0
+ *   ngx_epoll_module      index=5 ctx_index=1
  */
     ngx_event_max_module = 0;
     for (i = 0; ngx_modules[i]; i++) {
