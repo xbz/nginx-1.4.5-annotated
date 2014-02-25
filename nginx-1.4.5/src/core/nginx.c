@@ -361,6 +361,13 @@ main(int argc, char *const *argv)
 
     ngx_cycle = cycle;
 
+/*
+ * ngx_annotated 16
+ * #define ngx_get_conf(conf_ctx, module)  conf_ctx[module.index]
+ * ngx_get_conf(cycle->conf_ctx, ngx_core_module) =>
+ *   cycle->conf_ctx[ngx_core_module.index] =>
+ *   cycle->conf_ctx[0] => void *
+ */
     ccf = (ngx_core_conf_t *) ngx_get_conf(cycle->conf_ctx, ngx_core_module);
 
     if (ccf->master && ngx_process == NGX_PROCESS_SINGLE) {

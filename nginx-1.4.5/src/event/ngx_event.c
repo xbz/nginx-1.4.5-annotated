@@ -924,6 +924,12 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     ngx_conf_t            pcf;
     ngx_event_module_t   *m;
 
+/*
+ * ngx_annotated 14
+ * it is not allowed to dereference a void pointer(void *)
+ * if you wanna dereference a void pointer,
+ * cast it to void** first, then dereference:
+ */
     if (*(void **) conf) {
         return "is duplicate";
     }
@@ -957,6 +963,15 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
         return NGX_CONF_ERROR;
     }
 
+/*
+ * ngx_annotated 18
+ * link ctx to cf->ctx => link ctx to cycle->conf_ctx
+ * ctx is void ***
+ * conf = &(((void **) cf->ctx)[ngx_modules[i]->index]); =>
+ *   conf = &(((void **) cf->ctx)[3]) =>
+ *   ((void **) cf->ctx)[3] point to ctx =>
+ *   cf->cycle->conf_ctx[3] point to ctx
+ */
     *(void **) conf = ctx;
 
 /*
@@ -975,11 +990,11 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
  *     ctx_index=1
  *     (*ctx)[1] is ngx_epoll_conf_t*
  *
- *         ------     ------
- * ctx ->  |    | ->  |    | -> struct ngx_event_conf_t
- *         ------     ------
- *                    |    | -> struct ngx_epoll_conf_t
- *                    ------
+ *         ------     ------    ---------------------------
+ * ctx ->  |    | ->  |    | -> | struct ngx_event_conf_t |
+ *         ------     ------    ---------------------------
+ *                    |    | -> | struct ngx_epoll_conf_t |
+ *                    ------    ---------------------------
  *                    |    |
  *                    ------
  */
@@ -998,6 +1013,13 @@ ngx_events_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
         }
     }
 
+/*
+ * ngx_annotated 17
+ * save and recover cf, insure not modify function parameter cf
+ *   pcf = *cf;
+ *   ...        // modify cf
+ *   *cf = pcf;
+ */
     pcf = *cf;
     cf->ctx = ctx;
     cf->module_type = NGX_EVENT_MODULE;

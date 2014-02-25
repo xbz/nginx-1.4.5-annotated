@@ -185,6 +185,23 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
     ngx_queue_init(&cycle->reusable_connections_queue);
 
 
+/*
+ * ngx_annotated 15
+ *                          modules
+ *                         ----------     --------------------------
+ * ngx_cycle->conf_ctx ->  | void * | ->  | struct ngx_core_conf_t |
+ *                         ----------     --------------------------
+ *                         |        |
+ *                         ----------
+ *                         |        |
+ *                         ----------     ------     ----------        ---------------------------
+ *                         |        | ->  |    | ->  | void * | -----> | struct ngx_event_conf_t |
+ *                         ----------     ------     ----------        ---------------------------
+ *                         |        |                | void * | ---
+ *                         ----------                ----------   |    ---------------------------
+ *                           ......                               `--> | struct ngx_epoll_conf_t |
+ *                                                                     ---------------------------
+ */
     cycle->conf_ctx = ngx_pcalloc(pool, ngx_max_module * sizeof(void *));
     if (cycle->conf_ctx == NULL) {
         ngx_destroy_pool(pool);
