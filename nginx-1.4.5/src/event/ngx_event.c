@@ -443,9 +443,23 @@ ngx_handle_write_event(ngx_event_t *wev, size_t lowat)
 }
 
 
+/*
+ * ngx_annotated 22
+ * ngx_event_init_conf is ngx_events_module(NGX_CORE_MODULE)'s init_conf
+ */
 static char *
 ngx_event_init_conf(ngx_cycle_t *cycle, void *conf)
 {
+/*
+ * ngx_annotated 21
+ * ngx_get_conf(cycle->conf_ctx, ngx_events_module) =>
+ *   cycle->conf_ctx[ngx_events_module.index] =>
+ *   cycle->conf_ctx[3], which is initialized at function ngx_events_block,
+ * which is command "events"'s set function
+ * nginx.conf:
+ *   1.  no events => NO call ngx_events_block => cycle->conf_ctx[3]==NULL
+ *   2. has events =>    call ngx_events_block => cycle->conf_ctx[3]!=NULL
+ */
     if (ngx_get_conf(cycle->conf_ctx, ngx_events_module) == NULL) {
         ngx_log_error(NGX_LOG_EMERG, cycle->log, 0,
                       "no \"events\" section in configuration");

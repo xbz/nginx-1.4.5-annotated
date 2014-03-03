@@ -151,3 +151,36 @@ index:42 ctx_index:34
 index:43 ctx_index:35
 index:44 ctx_index:36
 index:45 ctx_index:37 /* http module end */
+
+nginx.conf minimal
+1. empty nginx.conf
+  nginx start fail
+    nginx: [emerg] no "events" section in configuration
+# cat nginx.conf
+2. events
+  nginx start ok
+  no listening socket
+  curl access fail(curl ip:80, curl ip:8000)
+# cat nginx.conf
+events {
+}
+3. events, http
+  nginx start ok
+  no listening socket
+  curl access fail(curl ip:80, curl ip:8000)
+# cat nginx.conf
+events {
+}
+http {
+}
+4. events, http, server(minimal accessable nginx.conf)
+  nginx start ok
+  has listening socket
+  curl ok(curl ip:8000)
+# cat ngins.conf
+events {
+}
+http {
+  server {
+  }
+}

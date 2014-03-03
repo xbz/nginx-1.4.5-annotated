@@ -282,6 +282,12 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
         return NULL;
     }
 
+/*
+ * ngx_annotated 19
+ * read and parse nginx.conf
+ *   nginx.conf consists of commands(struct ngx_command_t)
+ *   call each command's set function
+ */
     if (ngx_conf_parse(&conf, &cycle->conf_file) != NGX_CONF_OK) {
         environ = senv;
         ngx_destroy_cycle_pools(&conf);
@@ -301,6 +307,11 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
  *   ngx_core_module
  *   ngx_events_module
  *   ngx_regex_module
+ */
+/*
+ * ngx_annotated 20
+ * first call ngx_conf_parse(parse nginx.conf)
+ * then call NGX_CORE_MODULE's init_conf
  */
     for (i = 0; ngx_modules[i]; i++) {
         if (ngx_modules[i]->type != NGX_CORE_MODULE) {
