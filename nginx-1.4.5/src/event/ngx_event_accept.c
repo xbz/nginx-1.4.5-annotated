@@ -354,6 +354,11 @@ ngx_event_accept(ngx_event_t *ev)
         log->data = NULL;
         log->handler = NULL;
 
+/*
+ * ngx_annotated 23
+ * ls->handler is ngx_http_init_connection
+ * set in http/ngx_http.c::ngx_http_add_listening
+ */
         ls->handler(c);
 
         if (ngx_event_flags & NGX_USE_KQUEUE_EVENT) {

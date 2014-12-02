@@ -259,9 +259,14 @@ ngx_process_events_and_timers(ngx_cycle_t *cycle)
  * ngx_kqueue_module, ngx_rtsig_module, ngx_eventport_module
  * ngx_win32_select_module, ngx_devpoll_module, ngx_aio_module
  *
+ * #define ngx_process_events   ngx_event_actions.process_events
  * if using epoll
  * #define ngx_process_events   ngx_event_actions.process_events
  * ngx_event_actions = ngx_epoll_module_ctx.actions;
+ *
+ * ngx_process_events =>
+ *            ngx_event_actions.process_events =>   // using epoll
+ * ngx_epoll_module_ctx.actions.process_events
  */
     (void) ngx_process_events(cycle, timer, flags);
 

@@ -417,11 +417,6 @@ main(int argc, char *const *argv)
     ngx_use_stderr = 0;
 
 /*
- * ngx_annotated 1
- * #define NGX_PROCESS_SINGLE     0
- */
-
-/*
  * ngx_annotated 6
  * 1. master_process off; worker_processes  1;
  * call ngx_single_process_cycle
@@ -442,6 +437,11 @@ main(int argc, char *const *argv)
  * [log]start worker process 24525
  * [log]worker cycle
  * two process running(one master and one worker)
+ */
+
+/*
+ * ngx_annotated 1
+ * #define NGX_PROCESS_SINGLE     0
  */
     if (ngx_process == NGX_PROCESS_SINGLE) {
 /*
